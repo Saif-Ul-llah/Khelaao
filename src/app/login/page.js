@@ -93,7 +93,7 @@ const Login = () => {
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                   <a
                     href="#"
-                    class="flex items-center mb-6 text-2xl font-semibold text-orange-800 dark:text-white"
+                    class="flex items-center mb-6 text-2xl font-bold text-orange-800 dark:text-white"
                   >
                     <Image
                       class="w-8 h-8 mr-2"
