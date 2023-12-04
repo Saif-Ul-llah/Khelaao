@@ -5,17 +5,25 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import axios from "../utilis/axios";
+import { useCookies } from "react-cookie";
+import jwt from "jsonwebtoken";
+import useStore from "../store";
 
 const Login = () => {
+  // const key = "hamzaali";
+  const { setUserData, setToken } = useStore();
+  // const { userData, setUserData } = useStore();
   const router = useRouter();
+  const [cookie, setCookie] = useCookies(["token"]);
   const { data: session } = useSession();
   const [formData, setFormData] = useState({
-    email: "",
+    emailAddress: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({
-    email: "",
+    emailAddress: "",
     password: "",
   });
 
@@ -36,9 +44,9 @@ const Login = () => {
     signIn("google");
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = (emailAddress) => {
     // Add your email validation logic here
-    return email ? "" : "Email is required";
+    return emailAddress ? "" : "Email is required";
   };
 
   const validatePassword = (password) => {
@@ -46,21 +54,48 @@ const Login = () => {
     return password ? "" : "Password is required";
   };
 
-  const handleSignIn = async (e) => {
+  const handleSignIn = async (e) => { 
     e.preventDefault();
     // console.log(formData.email,formData.password)
-    const emailError = validateEmail(formData.email);
+    const emailError = validateEmail(formData.emailAddress);
     const passwordError = validatePassword(formData.password);
     if (emailError || passwordError) {
       setErrors({
-        email: emailError,
+        emailAddress: emailError,
         password: passwordError,
       });
     } else {
-      // Perform login or further actions
-      console.log("Form is valid. Perform login or other actions.");
+      try {
+        const response = await axios.post("/user/signIn", formData);
+        if (response.status == 200) {
+          const data = response.data;
+          let token = data.token;
+
+          const decodedToken = jwt.decode(token);
+          if (decodedToken) {
+            // cookie
+            setCookie("token", JSON.stringify(data.token));
+            setCookie("userData", JSON.stringify(decodedToken));
+            // localStorage
+            // localStorage.setItem("userData", JSON.stringify(decodedToken));
+            console.log("Decoded JWT:", decodedToken);
+            // Zustand for token
+            const newToken = token;
+            setToken(newToken);
+            // Zustand for userData
+            const NewUserData = decodedToken;
+            setUserData(NewUserData);
+            router.push("/dashboard");
+          } else {
+            console.error("Failed to decode JWT");
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-    console.log(formData);
+
+    // console.log(formData);
   };
 
   if (session) {
@@ -117,15 +152,17 @@ const Login = () => {
                       </label>
                       <input
                         type="email"
-                        name="email"
+                        name="emailAddress"
                         id="email"
                         onChange={handleChange}
-                        value={formData.email}
+                        value={formData.emailAddress}
                         class="bg-gray-50 border text-black border-gray-300  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-50 dark:border-slate-100 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500"
                         placeholder="Email"
                         required=""
                       />
-                      <div className="text-red-500 text-sm">{errors.email}</div>
+                      <div className="text-red-500 text-sm">
+                        {errors.emailAddress}
+                      </div>
                     </div>
                     <div>
                       <label

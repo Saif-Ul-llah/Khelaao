@@ -2,18 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import React from "react";
+import useStore from "../store";
 
 const SideMenuBar = () => {
   const router = useRouter();
+  const { userData  } = useStore();
+  let user =  userData?.fullName;
+  // console.log(user);
   return (
     <div>
       <div class="fixed flex flex-col top-0 left-0 w-14 hover:w-64 md:w-64 bg-orange-600 dark:bg-gray-900 h-full text-white transition-all duration-300 border-none z-10 sidebar">
         <div class="overflow-y-auto overflow-x-hidden flex flex-col justify-between flex-grow">
           <ul class="flex flex-col py-4 space-y-1">
-            
+              {/* Home */}
             <li
               onClick={() => {
-                router.push("/home");
+                router.push("/dashboard");
               }}
             >
               <a
@@ -39,7 +43,7 @@ const SideMenuBar = () => {
                 <span class="ml-2 text-sm tracking-wide truncate">Home</span>
               </a>
             </li>
-
+              {/* Board */}
             <li>
               <a
                 href="#"
@@ -64,7 +68,7 @@ const SideMenuBar = () => {
                 <span class="ml-2 text-sm tracking-wide truncate">Board</span>
               </a>
             </li>
-
+              {/* Messages */}
             <li>
               <a
                 href="#"
@@ -91,7 +95,7 @@ const SideMenuBar = () => {
                 </span>
               </a>
             </li>
-
+              {/* Notifications */}
             <li>
               <a
                 href="#"
@@ -121,7 +125,7 @@ const SideMenuBar = () => {
                 </span>
               </a>
             </li>
-
+             {/* seprator */}
             <li class="px-5 hidden md:block">
               <div class="flex flex-row items-center mt-5 h-8">
                 <div class="text-sm tracking-wide text-white font-semibold uppercase">
@@ -129,8 +133,12 @@ const SideMenuBar = () => {
                 </div>
               </div>
             </li>
-
-            <li>
+              {/* Profile */}
+            <li
+             onClick={() => {
+              router.push("/profile");
+            }}
+            >
               <a
                 href="#"
                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-orange-800 dark:hover:bg-gray-600 text-white hover:text-white border-l-4 border-transparent hover:border-orange-300 dark:hover:border-gray-800 pr-6"
@@ -151,10 +159,10 @@ const SideMenuBar = () => {
                     ></path>
                   </svg>
                 </span>
-                <span class="ml-2 text-sm tracking-wide truncate">Profile</span>
+                <p class="ml-2 text-sm tracking-wide truncate">{user}</p>
               </a>
             </li>
-
+             {/* Setting */}
             <li>
               <a
                 href="#"

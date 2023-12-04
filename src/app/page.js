@@ -1,15 +1,23 @@
-'use client'
+"use client";
 
 import React from "react";
-import Login from "./login/page";
-import { SessionProvider } from "next-auth/react"
+import Live from "./home/page";
+// import Login from "./login/page";
+// import { ZustandProvider } from "zustand";
+// import { SessionProvider } from "next-auth/react"
 
 const Home = () => {
   return (
     <div>
-      <SessionProvider>
+      {/* <SessionProvider>
         <Login />
-      </SessionProvider>
+      </SessionProvider> */}
+    
+    {/* <ZustandProvider> */}
+      <Live />
+      
+      {/* </ZustandProvider> */}
+ 
     </div>
   );
 };

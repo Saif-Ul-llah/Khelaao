@@ -1,8 +1,12 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import axios from "../utilis/axios"
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+const router= useRouter();
+
   const [formData, setformData] = useState({
     fullName: "",
     emailAddress: "",
@@ -43,7 +47,7 @@ const SignUp = () => {
     }));
   };
 
-  const handleSignIn = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     // console.log(formData.emailAddress,formData.password)
 
@@ -65,7 +69,18 @@ const SignUp = () => {
       // Perform login or further actions
       console.log("Form is valid. Perform login or other actions.");
     }
-    console.log(formData);
+
+    try {
+      const response =await axios.post("/user/signup",formData)
+      // console.log(response);
+      if(response.status==200){
+        router.push("/login")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    // console.log(formData);
   };
 
   return (
@@ -197,7 +212,7 @@ const SignUp = () => {
                   <div class="relative z-0 w-full  group">
                     <button
                       type="submit"
-                      onClick={handleSignIn}
+                      onClick={handleSignUp}
                       className=" w-full text-white bg-orange-800 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm py-2 mx-2 text-center dark:bg-orange-800 dark:hover:bg-orange-700 dark:focus:ring-primary-800"
                     >
                       SignUp
