@@ -12,7 +12,7 @@ import useStore from "../store";
 
 const Login = () => {
   // const key = "hamzaali";
-  const { setUserData, setToken } = useStore();
+  const { setUserData, setToken, setPlayerData } = useStore();
   // const { userData, setUserData } = useStore();
   const router = useRouter();
   const [cookie, setCookie] = useCookies(["token"]);
@@ -54,7 +54,7 @@ const Login = () => {
     return password ? "" : "Password is required";
   };
 
-  const handleSignIn = async (e) => { 
+  const handleSignIn = async (e) => {
     e.preventDefault();
     // console.log(formData.email,formData.password)
     const emailError = validateEmail(formData.emailAddress);
@@ -78,14 +78,29 @@ const Login = () => {
             setCookie("userData", JSON.stringify(decodedToken));
             // localStorage
             // localStorage.setItem("userData", JSON.stringify(decodedToken));
-            console.log("Decoded JWT:", decodedToken);
+            const config = {
+              headers: { Authorization: `Bearer ${data.token}` },
+            };
+            try {
+              const resp = await axios.get("/player/getPlayer", config);
+              // console.log(resp);
+              console.log(resp.data.player[0]);
+              const NewPlayerData = resp.data.player[0];
+              setPlayerData(NewPlayerData);
+              F;
+              // console.log("getting player info",resp)
+            } catch (error) {
+              console.log(error);
+            }
+            // console.log("Decoded JWT:", decodedToken);
             // Zustand for token
             const newToken = token;
             setToken(newToken);
             // Zustand for userData
             const NewUserData = decodedToken;
             setUserData(NewUserData);
-            router.push("/dashboard");
+            // router.push("/dashboard");
+            router.push("/UmpireHome");
           } else {
             console.error("Failed to decode JWT");
           }

@@ -1,12 +1,14 @@
 // UserProfile.js
-
+"use client";
 import React from "react";
 import SideMenuBar from "../componets/SideMenuBar";
+import useStore from "../store";
 
 const Profile = () => {
   // Dummy data for the player
+  const { userData } = useStore();
   const playerData = {
-    name: "John Doe",
+    name: userData.fullName || " ",
     role: "All-rounder",
     matchesPlayed: 150,
     age: 28,
@@ -29,7 +31,7 @@ const Profile = () => {
           <h2 className="text-2xl font-bold mb-2">{playerData.name}</h2>
           <p className="text-lg text-gray-600 mb-4">{playerData.role}</p>
           <div className="grid grid-cols-2 gap-4">
-            <div >
+            <div className="flex gap-10">
               <div className="flex justify-center ">
                 <div className="flex items-center justify-start px-3 m-2 rounded-full h-14 w-14 bg-gray-100 border-2 border-gray-300">
                   <p>{playerData.matchesPlayed}</p>
@@ -43,18 +45,28 @@ const Profile = () => {
                   <p> {playerData.age}</p>
                 </div>
                 <p className="text-sm text-gray-600 flex items-center justify-start">
-                  <strong>Age:</strong>
+                  <strong>Age</strong>
+                </p>
+              </div>
+            
+              <div className="flex justify-center ">
+                <div className="flex items-center justify-start px-3 m-2 rounded-full h-14 w-14 bg-gray-100 border-2 border-gray-300">
+                  <p>{playerData.score}</p>
+                </div>
+                <p className="text-sm text-gray-600 flex items-center justify-start">
+                  <strong>Score</strong>
+                </p>
+              </div>
+              <div className="flex justify-center ">
+                <div className="flex items-center justify-start m-2 px-3 rounded-full h-14 w-14 bg-gray-100 border-2 border-gray-300">
+                  <p> {playerData.points}</p>
+                </div>
+                <p className="text-sm text-gray-600 flex items-center justify-start">
+                  <strong>Points</strong>
                 </p>
               </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">
-                <strong>Score:</strong> {playerData.score}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Points:</strong> {playerData.points}
-              </p>
-            </div>
+         
           </div>
         </div>
       </div>

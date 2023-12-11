@@ -8,6 +8,7 @@ const MoreInfo = () => {
   const [modal, setModal] = useState(false);
   const [playingRole, setplayingRole] = useState("");
   const [WindowOpen, setWindowOpen] = useState(true);
+  
   const handleplayingRoleChange = (type) => {
     setplayingRole(type);
   };

@@ -1,14 +1,30 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import useStore from "../store";
+import axios from "../utilis/axios";
 
 const SideMenuBar = () => {
   const router = useRouter();
-  const { userData  } = useStore();
+  const { userData ,token } = useStore();
   let user =  userData?.fullName;
   // console.log(user);
+  // const config = {
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
+  // useEffect(()=>{
+  //   const fetchMessage = async()=>{
+  //     try {
+  //       const response = await axios.get('/player/allInvitations',config)
+  //       console.log(response);  
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+      
+  //   }
+  //   fetchMessage()
+  // },[])
   return (
     <div>
       <div class="fixed flex flex-col top-0 left-0 w-14 hover:w-64 md:w-64 bg-orange-600 dark:bg-gray-900 h-full text-white transition-all duration-300 border-none z-10 sidebar">
@@ -96,7 +112,10 @@ const SideMenuBar = () => {
               </a>
             </li>
               {/* Notifications */}
-            <li>
+            <li 
+            onClick={() => {
+              router.push("/Notification");
+            }}>
               <a
                 href="#"
                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-orange-800 dark:hover:bg-gray-600 text-white hover:text-white border-l-4 border-transparent hover:border-orange-300 dark:hover:border-gray-800 pr-6"

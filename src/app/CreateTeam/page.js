@@ -11,14 +11,14 @@ const CreateTeam = () => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  // let data = userData;
+  // let data = localStorage.getItem();
   let captainId = userData.id;
   
   const [step, setStep] = useState(1);
   const [teamData, setTeamData] = useState({
     name: "",
     abbreviation: "",
-    image: {},
+    image: null,
     description: "",
     captain: captainId,
     playerId: [],
@@ -67,6 +67,14 @@ const CreateTeam = () => {
     // console.log(teamData);
   };
 
+  const handleImage = (e)=>{
+    const newValue = e.target.value;
+    setTeamData((prevState) => ({
+      ...prevState,
+      "image": newValue,
+    }));
+  }
+
   const submitHandler = async (e) => {
     e.preventDefault();
     console.log(captainId);
@@ -78,11 +86,7 @@ const CreateTeam = () => {
         console.log(response.data.createdTeam._id)
         let teamId =response.data.createdTeam._id;
         try {
-          const respon = await axios.get(
-            "/player/getPlayersForInvitation",
-            config,
-            teamId,
-          );
+          const respon = await axios.post(`/player/getPlayersForInvitation/${teamId}`,teamId,config);
           setplayers(respon.data.players);
           // console.log(response);
         } catch (error) {
@@ -95,6 +99,7 @@ const CreateTeam = () => {
     }
     console.log(teamData);
   };
+
   const Form = () => {
     return (
       <div>
@@ -189,9 +194,7 @@ const CreateTeam = () => {
               id="user_avatar"
               type="file"
               // value={teamData.image}
-              onChange={(e) =>
-                handleFieldChange("image", e.currentTarget.files[0])
-              }
+              onChange={handleImage}
             />
           </div>
         </div>
@@ -236,29 +239,29 @@ const CreateTeam = () => {
               <tbody className="bg-gray-200">
                 {players.map((player) => (
                   <tr
-                    key={player.id}
+                    key={player.playerId}
                     className="bg-white border-4 border-gray-200"
                   >
                     <td className="px-10 py-2 flex flex-row items-center">
                       <img
                         className="h-8 w-8 rounded-full object-cover "
-                        src={`https://randomuser.me/api/portraits/men/${player.id}.jpg`}
+                        src={`https://randomuser.me/api/portraits/men/${10}.jpg`}
                         alt=""
                       />
                     </td>
                     <td>
                       <span className="text-center ml-2 font-semibold">
-                        {player.name}
+                        {player.fullName}
                       </span>
                     </td>
                     <td className="px-10 py-2">
-                      <span>{player.date}</span>
+                      <span>{player.playingRole}</span>
                     </td>
                     <td className="px-10 py-2">
                       <label>
                         <input
                           type="checkbox"
-                          value={player.id}
+                          value={player.playerId}
                           className="peer hidden"
                           name="playerId"
                           onClick={(e) =>
