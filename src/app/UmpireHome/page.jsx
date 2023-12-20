@@ -1,124 +1,73 @@
-import React from "react";
-import SideMenuBar from "../componets/SideMenuBar";
+// upcoming matchs for umpire 
+'use client'
 
-const UmpireHome = () => {
-  const boilerplateList = [
-    "Boilerplate 1",
-    "Boilerplate 2",
-    "Boilerplate 3",
-    // Add more boilerplates as needed
-  ];
+import React, { useEffect, useState } from 'react';
+import SideMenuBar from "../componets/SideMenuBar";
+import useStore from "../store";
+import { useRouter } from 'next/navigation';
+import axios from "../utilis/axios"
+
+const UpcomingMatches = () => {
+  const {token ,setMatchData,userData}=useStore();
+  const router = useRouter();
+  const [matches,setmatches]=useState([]);
+
+  // const { token ,userData} = useStore();
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+const startMatch =(newMatchData)=>{
+  router.push('/Toss')
+  setMatchData(newMatchData);
+
+}
+
+  useEffect(()=>{
+    const fetchMatch = async()=>{
+      try {
+        const response = await axios.get(`/player/playerMatchHistory`,config)
+        // console.log(response.data.history)
+        setmatches(response.data.history)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchMatch();
+  },[])
+
+  
+
   return (
-    <div>
+    <div className="flex">
       <SideMenuBar />
-      <div className="ml-16 md:ml-64 p-4">
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 mt-2  mx-auto w-full">
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            6
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            4
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            3
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            2
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            1
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            Zero
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            Wicket
-          </div>
-          <div className="flex cursor-pointer hover:bg-white hover:text-gray-500 justify-center items-center font-bold text-3xl w-full h-16 border-2 border-gray-500 rounded-lg bg-gray-500 text-white">
-            NO Ball
-          </div>
+
+      <div className="flex-grow flex flex-col justify-center items-center">
+        <h2 className="md:text-3xl text-xl font-semibold mb-6">Upcoming Matches</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pl-16 md:pl-64">
+      {matches.map((match, index) => (
+        <div
+          key={index}
+          onClick={() => startMatch(match)}
+          className="bg-gray-500 p-6 rounded-md cursor-pointer shadow-md mb-4"
+        >
+          <h3 className="text-xl font-semibold mb-2">
+            {match.teaminfo.map(team => team[0].name).join(' vs ')}
+          </h3>
+          <p className="text-white mb-2">
+            <span className="font-semibold">Date:</span> {new Date(match._id.date).toDateString()}
+          </p>
+          <p className="text-white mb-2">
+            <span className="font-semibold">Venue:</span> {match._id.venue}
+          </p>
+          <p className="text-white">
+            <span className="font-semibold">Time:</span> {match._id.time}
+          </p>
         </div>
-        <div>
-          <label className="sr-only" htmlFor="team1">
-            Select Baller
-          </label>
-          <select
-            className="w-full rounded-lg mt-2 border-2 p-3 text-lg"
-            id="team1"
-            // value={''}
-            // onChange={(e) => handleFieldChange("team1", e.target.value)}
-          >
-            <option value="">Select Baller</option>
-            {boilerplateList.map((team, index) => (
-              <option key={index} value={boilerplateList[index]}>
-                {boilerplateList[index]}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-2">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" class="px-3 py-3">
-                    Ball
-                  </th>
-                  <th scope="col" class="px-2 py-3">
-                    TO
-                  </th>
-                  <th scope="col" class="px-2 py-3">
-                    Score
-                  </th>
-                  <th scope="col" class="px-2 py-3 text-right">
-                    <span class="">Update</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th
-                    scope="row"
-                    class="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                  11
-                  </th>
-                  <td class="px-2 py-4">Ali</td>
-                  <td class="px-2 py-4">2</td>
-                  <td class="px-2 py-4 text-right">
-                    <a
-                      href="#"
-                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th
-                    scope="row"
-                    class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    10
-                  </th>
-                  <td class="px-2 py-4">Haroon hammad</td>
-                  <td class="px-2 py-4">6</td>
-                  <td class="px-2 py-4 text-right">
-                    <a
-                      href="#"
-                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      ))}
+    </div>
       </div>
     </div>
   );
 };
 
-export default UmpireHome;
+export default UpcomingMatches;

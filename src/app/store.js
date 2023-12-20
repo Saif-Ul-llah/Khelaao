@@ -1,30 +1,68 @@
-import create from 'zustand';
+// import create from 'zustand';
 
-// const parseCookieJSON = (cookieName) => {
-//   const cookieValue = document.cookie.replace(new RegExp(`(?:(?:^|.*;\\s*)${cookieName}\\s*=\\s*([^;]*).*$)|^.*$`), '$1');
-//   try {
-//     return cookieValue ? JSON.parse(cookieValue) : null;
-//   } catch (error) {
-//     console.error(`Error parsing ${cookieName} cookie JSON:`, error.message);
-//     return null;
+// const useStore = create((set) => ({
+//   token:  null,
+//   setToken: (newToken) => {
+//     set({ token: newToken });
+//   },
+//   userData: null,
+//   setUserData: (newUserData) => {
+//     set({ userData: newUserData });
+//   },
+//   playerData:null,
+//   setPlayerData:(newPlayerData)=>{
+//     set({ playerData: newPlayerData });
+//   },
+//   teamData:null,
+//   setTeamData:(newTeamData)=>{
+//     set({ TeamData: newTeamData });
+//   },
+//   MatchData:null,
+//   setMatchData:(newMatchData)=>{
+//     set({ MatchData: newMatchData });
 //   }
-// };
+// }));
 
-const useStore = create((set) => ({
-  token:  null,
-  setToken: (newToken) => {
-    // document.cookie = `token=${newToken}; Secure; HttpOnly; SameSite=Strict`;
-    set({ token: newToken });
-  },
+// export default useStore;
+import create from 'zustand';
+import Cookies from 'js-cookie';
+
+const initialState = {
+  token: null,
   userData: null,
-  setUserData: (newUserData) => {
-    // document.cookie = `userData=${JSON.stringify(newUserData)}; Secure; HttpOnly; SameSite=Strict`;
-    set({ userData: newUserData });
-  },
-  playerData:null,
-  setPlayerData:(newPlayerData)=>{
-    set({ playerData: newPlayerData });
-  }
-}));
+  playerData: null,
+  teamData: null,
+  MatchData: null,
+};
+
+const useStore = create((set) => {
+  // Try to get initial state from cookies
+  const storedState = JSON.parse(JSON.stringify(Cookies.get('myAppState'))) || initialState;
+
+  set(storedState);
+
+  return {
+    setToken: (newToken) => {
+      set({ token: newToken });
+      Cookies.set('myAppState', JSON.stringify(useStore.getState()));
+    },
+    setUserData: (newUserData) => {
+      set({ userData: newUserData });
+      Cookies.set('myAppState', JSON.stringify(useStore.getState()));
+    },
+    setPlayerData: (newPlayerData) => {
+      set({ playerData: newPlayerData });
+      Cookies.set('myAppState', JSON.stringify(useStore.getState()));
+    },
+    setTeamData: (newTeamData) => {
+      set({ teamData: newTeamData });
+      Cookies.set('myAppState', JSON.stringify(useStore.getState()));
+    },
+    setMatchData: (newMatchData) => {
+      set({ MatchData: newMatchData });
+      Cookies.set('myAppState', JSON.stringify(useStore.getState()));
+    },
+  };
+});
 
 export default useStore;

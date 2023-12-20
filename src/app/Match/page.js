@@ -45,9 +45,9 @@ const CreateMatch = () => {
     setStep(step + 1);
   };
 
-  const prevStep = () => {
-    setStep(step - 1);
-  };
+  // const prevStep = () => {
+  //   setStep(step - 1);
+  // };
 
   const handleFieldChange = (fieldName, value) => {
     setMatchData((prevState) => ({
@@ -64,6 +64,7 @@ const CreateMatch = () => {
       const response = await axios.post(`/match/match/${matchData.team1}`,matchData,config);
       if (response) {
         router.push("/dashboard");
+        setStep(step-1);
       }
     } catch (error) {
       console.log(error);
@@ -105,6 +106,25 @@ const CreateMatch = () => {
                 onChange={(e) => handleFieldChange("team2", e.target.value)}
               >
                 <option value="">Select Opponent Team</option>
+                {teams.map((team, index) => (
+                  <option key={index} value={team._id}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="sr-only" htmlFor="team2">
+                Select Umpire
+              </label>
+              <select
+                className="w-full rounded-lg border-2 p-3 text-lg"
+                id="Select_Umpire"
+                value={matchData.team2}
+                onChange={(e) => handleFieldChange("team2", e.target.value)}
+              >
+                <option value="">Select Umpire</option>
                 {teams.map((team, index) => (
                   <option key={index} value={team._id}>
                     {team.name}
@@ -186,31 +206,25 @@ const CreateMatch = () => {
           </div>
         </div>
 
-        <div className="mt-12 flex justify-between">
-          <button
-            type="button"
-            onClick={prevStep}
-            className="mr-10 inline-block w-full rounded-lg bg-gray-300 px-6 py-3 font-medium text-black sm:w-auto"
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            onClick={submitHandler}
-            className="inline-block w-full rounded-lg bg-orange-500 px-5 py-3 font-medium text-white sm:w-auto"
-          >
-            Match Start
-          </button>
-        </div>
+        {/* button for submit */}
+        <div className="mt-5 float-right">
+              <button
+                type="button"
+                onClick={submitHandler}
+                className="inline-block w-full rounded-lg bg-orange-500 px-5 py-3 font-medium text-white sm:w-auto"
+              >
+                Create Match
+              </button>
+            </div>
       </div>
     );
   };
 
   const renderForm = () => {
     switch (step) {
-      case 1:
-        return <TeamSelection />;
       case 2:
+        return <TeamSelection />;
+      case 1:
         return <MatchDetails />;
       default:
         return <TeamSelection />;

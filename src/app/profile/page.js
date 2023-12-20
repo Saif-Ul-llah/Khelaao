@@ -8,7 +8,7 @@ const Profile = () => {
   // Dummy data for the player
   const { userData } = useStore();
   const playerData = {
-    name: userData.fullName || " ",
+    name: userData?.fullName || " ",
     role: "All-rounder",
     matchesPlayed: 150,
     age: 28,

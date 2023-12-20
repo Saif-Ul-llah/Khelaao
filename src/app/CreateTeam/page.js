@@ -6,14 +6,14 @@ import axios from "../utilis/axios";
 import useStore from "../store";
 
 const CreateTeam = () => {
-  const { userData, token } = useStore();
+  const { userData, token, setMatchData } = useStore();
   // const {teamId,setTeamId}=useState("");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
   // let data = localStorage.getItem();
   let captainId = userData.id;
-  
+
   const [step, setStep] = useState(1);
   const [teamData, setTeamData] = useState({
     name: "",
@@ -24,6 +24,7 @@ const CreateTeam = () => {
     playerId: [],
     sports: "",
   });
+  const [teamId ,setTeamId]=useState("")
 
   const [players, setplayers] = useState([]);
   // const get = async () => {
@@ -67,37 +68,53 @@ const CreateTeam = () => {
     // console.log(teamData);
   };
 
-  const handleImage = (e)=>{
+  const handleImage = (e) => {
     const newValue = e.target.value;
     setTeamData((prevState) => ({
       ...prevState,
-      "image": newValue,
+      image: newValue,
     }));
-  }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(captainId);
+    // console.log(captainId);
     try {
       const response = await axios.post(`/team/team/`, teamData, config);
-      console.log(response);
-      if(response){
+      // console.log(response);
+      if (response) {
         // setTeamId(response.createdTeam._id);
-        console.log(response.data.createdTeam._id)
-        let teamId =response.data.createdTeam._id;
+        // console.log(response.data.createdTeam._id);
+        setTeamId(response.data.createdTeam._id);
+        let teamId = response.data.createdTeam._id;
         try {
-          const respon = await axios.post(`/player/getPlayersForInvitation/${teamId}`,teamId,config);
+          const respon = await axios.post(
+            `/player/getPlayersForInvitation/${teamId}`,
+            teamId,
+            config
+          );
           setplayers(respon.data.players);
           // console.log(response);
         } catch (error) {
           console.log(error);
         }
-      setStep(step + 1);
+        setStep(step + 1);
       }
     } catch (error) {
       console.log(error);
     }
     console.log(teamData);
+  };
+
+  const sendInvitation = async () => {
+    console.log(teamData.playerId);
+    console.log("Team ID : ",teamId);
+    try {
+      const response = await axios.post(`/team/teamInvitation/${teamId}`,teamData.playerId,config)
+      console.log(response)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const Form = () => {
@@ -290,6 +307,16 @@ const CreateTeam = () => {
                 ))}
               </tbody>
             </table>
+            {/* button for submit */}
+            <div className="mt-5 float-right">
+              <button
+                type="button"
+                onClick={sendInvitation}
+                className="inline-block w-full rounded-lg bg-orange-500 px-5 py-3 font-medium text-white sm:w-auto"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

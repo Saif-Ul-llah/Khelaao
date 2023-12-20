@@ -84,15 +84,10 @@ const Login = () => {
             try {
               const resp = await axios.get("/player/getPlayer", config);
               // console.log(resp);
-              console.log(resp.data.player[0]);
+              // console.log(resp.data.player[0]);
               const NewPlayerData = resp.data.player[0];
               setPlayerData(NewPlayerData);
-              F;
-              // console.log("getting player info",resp)
-            } catch (error) {
-              console.log(error);
-            }
-            // console.log("Decoded JWT:", decodedToken);
+
             // Zustand for token
             const newToken = token;
             setToken(newToken);
@@ -100,7 +95,15 @@ const Login = () => {
             const NewUserData = decodedToken;
             setUserData(NewUserData);
             // router.push("/dashboard");
-            router.push("/UmpireHome");
+            // console.log(decodedToken);
+            // if (decodedToken.role == "Umpire") {
+              router.push("/UmpireHome");
+            // } else {
+              // router.push("/dashboard");
+            // }
+          } catch (error) {
+            console.log(error);
+          }
           } else {
             console.error("Failed to decode JWT");
           }

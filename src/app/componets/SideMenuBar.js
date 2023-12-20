@@ -111,7 +111,7 @@ const SideMenuBar = () => {
                 </span>
               </a>
             </li>
-              {/* Notifications */}
+              {/* Invitation */}
             <li 
             onClick={() => {
               router.push("/Notification");
@@ -137,11 +137,9 @@ const SideMenuBar = () => {
                   </svg>
                 </span>
                 <span class="ml-2 text-sm tracking-wide truncate">
-                  Notifications
+                  Invitations
                 </span>
-                <span class="hidden md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-500 bg-red-50 rounded-full">
-                  1.2k
-                </span>
+               
               </a>
             </li>
              {/* seprator */}
