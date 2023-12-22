@@ -95,12 +95,12 @@ const Login = () => {
             const NewUserData = decodedToken;
             setUserData(NewUserData);
             // router.push("/dashboard");
-            // console.log(decodedToken);
-            // if (decodedToken.role == "Umpire") {
+            console.log(decodedToken);
+            if (decodedToken.role == "Umpire") {
               router.push("/UmpireHome");
-            // } else {
-              // router.push("/dashboard");
-            // }
+            } else {
+              router.push("/dashboard");
+            }
           } catch (error) {
             console.log(error);
           }

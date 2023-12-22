@@ -39,9 +39,9 @@ const TossScreen = () => {
 
   return (
     <div className="flex h-full">
-      <SideMenuBar />
+      <SideMenuBar/>
 
-      <div className="w-screen h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-screen h-screen flex items-center md:ml-72 ml-16 justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-md shadow-md w-96">
           <h2 className="text-3xl font-bold mb-4 text-orange-600">Cricket Toss</h2>
 
