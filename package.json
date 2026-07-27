@@ -26,5 +26,8 @@
     "eslint-config-next": "16.2.12",
     "postcss": "^8",
     "tailwindcss": "^4.3.3"
+  },
+  "overrides": {
+    "brace-expansion": "5.0.8"
   }
 }
