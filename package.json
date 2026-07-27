@@ -15,7 +15,7 @@
     "next": "14.0.1",
     "next-auth": "^4.24.15",
     "react": "^18",
-    "react-cookie": "^6.1.1",
+    "react-cookie": "^8.1.2",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
     "zustand": "^4.4.6"
