@@ -13,7 +13,7 @@
     "js-cookie": "^3.0.7",
     "jsonwebtoken": "^9.0.2",
     "next": "14.0.1",
-    "next-auth": "^4.24.4",
+    "next-auth": "^4.24.15",
     "react": "^18",
     "react-cookie": "^6.1.1",
     "react-dom": "^18",
