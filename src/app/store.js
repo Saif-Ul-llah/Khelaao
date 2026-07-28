@@ -36,8 +36,16 @@ const initialState = {
 };
 
 const useStore = create((set) => {
-  // Try to get initial state from cookies
-  const storedState = JSON.parse(JSON.stringify(Cookies.get('myAppState'))) || initialState;
+  // Try to get initial state from cookies.
+  // SSR-safe: js-cookie returns undefined on the server, and a missing/invalid
+  // cookie must not throw during prerender.
+  let storedState = initialState;
+  try {
+    const raw = Cookies.get('myAppState');
+    if (raw) storedState = { ...initialState, ...JSON.parse(raw) };
+  } catch (e) {
+    storedState = initialState;
+  }
 
   set(storedState);
 
